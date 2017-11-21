@@ -1,0 +1,2125 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	
+	<link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/themes/calcite/dijit/calcite.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" **media="screen"** type="text/css">
+	
+	<!--<script src="/js/tether.min.js"></script> -->
+	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/tether-tooltip/1.2.0/js/tooltip.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+	
+	<script src="//sliver.iowa.gov/sliver.js" async defer></script> 
+	<!--
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script> -->
+	
+	<!--  <script src="xepOnline.jqPlugin.js"></script>
+	<script src="https://xep.cloudformatter.com/Chandra.svc/genfile"></script>
+	<script src="https://xep.cloudformatter.com/Chandra.svc/genpackage"></script>
+	<script src="https://xep.cloudformatter.com/Chandra.svc/genpageimages"></script>
+	
+	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"><script> -->
+	<title>Flood Plain Permit Iowa DNR Quick Check</title>
+	
+    <style>
+      html, body{
+        height:100%;
+        width:100%;
+        margin:0;
+        padding:0px;
+		overflow: visible;
+		font-family: Calibri;
+      }
+	  .row{
+		font-family: Calibri, times, serif;
+		font-size: 1.1em;
+	  }
+	  table, th, td {
+		border: 1px solid black;
+		text-align: center;
+		border-collapse: collapse;
+		padding: 5px;
+	}
+	  
+	  #map {
+        height:100%;
+        width:100%;
+        margin-left:15px;
+        padding:0px;
+		overflow: visible;
+      }
+	
+	  
+	  #legendIMG{
+		position: absolute;
+		bottom: 160px;
+		left:35px;
+		z-index: 99;
+	  }
+	  
+	  img{
+		  float: left;
+		  margin-right: 5px; 
+	  }
+	  #policy {
+			height: 30px;
+			background: #416bad;
+			width: 100%;
+		}
+	  #scale{
+		font-size: 1.5em; 
+		background-color: black;
+		}
+	  /*
+	  #header{
+		background-color: #DFCFAE;
+		color: #3F3F3F;
+		text-align: center;
+		height: 82px;
+		}
+	  
+	  #getResult{
+		border: 1.5px solid red;background: #E5E4E2;
+		font-size: 1.5em; font-weight: bold; color: blue;
+		position:absolute; 
+		left: 245px; 
+		top:5px;    */
+	  }
+	   #search {
+         display: block;
+         position: relative;
+         z-index: 2;  
+         top: 180px !important;
+         left:100px; 
+      }
+	  
+	  #combo,#instruction{
+		font-family: Calibri;
+		font-size: 1.4em; 
+	  }
+	  
+	  
+	  label{  /* override the label font from bootstrap */
+		font-weight: normal !important;
+	  } 
+	  
+	  div#frm *{display:inline}
+	  .choice{
+		font-size: 1.0em; 
+	  }
+	  
+		#LocateBtn {
+		 float: left;
+		  margin: 10px;
+		  z-index: 50;
+		}
+		
+		#locate {
+		float:left; 
+		position:relative;
+		
+		left: 40px;
+		font-size: 1.2em;
+		}
+		
+		/*
+		
+		#container {
+			 transform:scale(0.9,0.9);
+		} */
+		
+		left, right, content{
+			line-height:0;
+			vertical-align: top;
+		}
+		#BasemapToggle {
+        position: absolute;
+		/*top: 65px;
+        right: 305px;  */
+        z-index: 2;
+      }
+	  
+	  #office,#other {
+			line-height: 160%;
+		}
+	
+	  #lp, #sp{
+		line-height: 200%;
+	  }
+	 
+	/*	 
+	html, body, .container, .row{ float: none; }
+	
+	.break-after {
+			display: block;
+			page-break-after: always;
+			position: relative;
+		}
+
+	.break-before {
+			display: block;
+			page-break-before: always;
+			position: relative;
+		}  
+	*/
+	  
+	  
+	  @media print{
+		<!--div { float: none !important; }
+		#other{page-break-before: always;}-->
+		.break-after{
+		page-break-after: always;
+		}
+		.break-before
+		  {
+			page-break-before: always;
+			page-break-inside: avoid;
+		  }
+	  } 
+	  
+	  @media only screen and (min-width : 768px) {
+			.is-table-row {
+				display: table;
+			}
+			.is-table-row [class*="col-"] {
+				float: none;
+				display: table-cell;
+				vertical-align: top;
+			}
+		} 
+	/*
+	  @media print{    
+			body:before {
+			content:url(https://programs.iowadnr.gov/maps/apis/idnr/js/gov/iowadnr/compactmap/images/logo_brown.png); 
+			/*content: url(https://programs.iowadnr.gov/maps/apis/idnr/images/logo_brown_small.png); */
+			position: relative;
+			z-index: -1;
+		  }  */
+		  
+	 button, a * {
+		 display: none !important;
+		}
+			
+	#print  { 
+		display:block; 
+		} 
+			
+			/*footer {page-break-after: always;} /*
+
+		}
+	  .esriSimpleSliderTL {  /* move the zoom in and out tool on map to the top left corner */
+		top: 0px;
+		left: 0px;
+	}
+	  
+	 .jumbotron {
+		padding-top: 0px;
+		padding-bottom: 0px;
+		margin-bottom: 0px; 
+		color: inherit;
+		background-color: #DFCFAE;
+		
+		}
+	  .esriScalebar {
+		z-index: 30;
+		padding-top: 29px !important;
+		position: relative !important;
+		width: 0px;
+		height: 20px !important;	
+		}
+	  
+	  .equal {
+		  display: flex;
+		  display: -webkit-flex;
+		  flex-wrap: wrap;
+		}
+		
+		/* this will remove href link from the print (bootstrap make it href show by default) */
+		
+		@media print {
+		  a[href]:after {
+			content: none !important;
+		  }
+		} 
+		
+		/*
+		@media print
+		{
+			div.container * { 
+				page-break-after:avoid;
+				page-break-before:avoid;
+			}
+		}
+		@media print
+		{
+			div.container { page-break-inside:avoid; }
+		}  */
+		
+	  @media screen and (min-device-width:768px) and (max-device-width:1024px);
+	  @media (min-width: 700px) and (orientation: landscape) { ... }
+	  
+	  esriAttribution
+		{
+		display:none !important;
+		}
+		
+		.esriAttributionItem
+		{
+		display:none !important;
+		}
+		
+	#resultWarning{
+		display: none;  
+	}
+	#plss-search{
+		display: none; 
+	}
+	</style>
+	
+	
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>  -->
+    <script src="https://js.arcgis.com/3.17/"></script>
+    <script>
+      var map;
+	  var endPoint;
+	  var startPoint;
+	  var identifyTask, identifyParams;
+	  var graphic;
+	  var moveable;
+	  var mapSpatialReferenceWKID = 102100;
+	  var n=0;
+	  var circle;
+	  
+	  function showHideSearch() {
+		var x = document.getElementById('plss-search');
+		if (x.style.display === 'none') {
+			x.style.display = 'block';
+		} else {
+			x.style.display = 'none';
+		}
+	 }
+	  //dojo.require("dojox.gfx.move"); 
+	  dojo.require("dojox.gfx.move");//console.log (navigator); 
+	   if ((navigator.userAgent.match(/IEMobile/i)) ||(navigator.userAgent.match(/Android/i)) || (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) ||(navigator.userAgent.match(/iPad/i))) {
+			$('#locateBtn').show();
+			$('#locate').show();
+			//$(".hideLocate").hide();	
+		//document.getElementById('locateBtn').style.display="block";
+			
+		} else {
+			
+			$('#locateBtn').hide();
+			$('#locate').hide();
+			//document.getElementById('locateBtn').style.display="none";
+		}  
+      require([
+        "esri/map",
+		"esri/geometry/webMercatorUtils",
+		"dojo/dom", 
+		"dojo/on",
+		"esri/geometry/Circle",
+		"esri/dijit/BasemapToggle",
+		"esri/layers/GraphicsLayer",
+		"esri/graphic",
+		"esri/dijit/Scalebar",
+        "esri/InfoTemplate",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/symbols/SimpleLineSymbol",
+		"esri/symbols/SimpleMarkerSymbol",
+        "esri/tasks/IdentifyTask",
+        "esri/tasks/IdentifyParameters",
+        "esri/dijit/Popup",
+		"esri/dijit/Search",
+		"esri/dijit/LocateButton",
+		 "esri/tasks/FindTask", 
+		 "esri/tasks/FindParameters",
+        "dojo/_base/array",
+        "esri/Color",
+        "dojo/dom-construct",
+		"dojo/i18n!esri/nls/jsapi",
+		//"dijit/Tooltip",
+        "dojo/domReady!"
+		  ], function (
+			Map, webMercatorUtils, dom, on, Circle, BasemapToggle, GraphicsLayer, Graphic,  Scalebar, InfoTemplate, ArcGISDynamicMapServiceLayer, SimpleFillSymbol,
+			SimpleLineSymbol, SimpleMarkerSymbol, IdentifyTask, IdentifyParameters, Popup,Search, LocateButton,FindTask, FindParameters,
+			arrayUtils, Color, domConstruct, esriBundle
+		  ) {
+
+			
+			var plssServiceUrl = "https://programs.iowadnr.gov/geospatial/rest/services/tools/plssLocator/MapServer";  
+			//var plssServiceUrl = "https://testgis.iowadnr.gov/geospatial/rest/services/tools/plssLocator/MapServer";
+			var mapSpatialReference;
+			
+			var markerSymbol, lineSymbol, polygonSymbol;
+			
+			markerSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255,0,0]), 2), new dojo.Color([255,255,0,0.25]));
+            lineSymbol  = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255,0,0]), 2);
+            polygonSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 10, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255, 0, 0]), 1), new dojo.Color([0, 255, 0, 0.50]));
+			
+			
+			mapSpatialReference = new esri.SpatialReference({"wkid":mapSpatialReferenceWKID});
+			initPlssSearchParams(plssServiceUrl,mapSpatialReference);
+			
+			function initPlssSearchParams(plssServiceUrl, mapSpatialReference){
+				plssFindTask = new FindTask(plssServiceUrl);
+				findParams = new FindParameters();
+				//findParams.outSpatialReference = new esri.SpatialReference({"wkid":mapSpatialReference});
+				findParams.outSpatialReference = mapSpatialReference;
+				findParams.returnGeometry = true;
+				findParams.layerIds = [1];
+				findParams.searchFields = ["TRSQQQ"];
+			  };
+			  function locatePLSS() {
+				var sText = dojo.byId("plss").value;
+				re = /T(6[5-9]|[7-9][0-9]|100)NR(0[1-7]E|[0-4][0-9]W)([0-2][0-9]|3[0-6])/i;
+				findParams.searchText = sText;
+				if (re.test(sText)===false){
+					alert("Please type in a legal search text (eg:T84NR23W07. TRS legal range in Iowa: T:65N-100N; R:01E-07E/01W-49W; section: 01-36"); 
+						return;
+				}
+				if (findParams.searchText){
+					plssFindTask.execute(findParams, showPlssResults, noPlssResults);
+				} else {
+					map.graphics.clear();
+				}
+			  }
+			   //PLSS Search event/find task
+		  dojo.connect(dojo.byId('search-plss'),'onclick',function(){
+      			locatePLSS();
+    	  });
+    	  
+		  dojo.connect(dojo.byId('plss'),'onkeydown',function(e) {
+			if(e.keyCode === 13){
+			locatePLSS();
+    	  }});
+		  
+	 function noPlssResults(error){
+      	map.graphics.clear();
+      	alert("Please enter a valid Township, Range and Section");
+      };
+      function showPlssResults(results){
+      	if (results.length>0){
+	      	map.graphics.clear(); 
+	        dojo.forEach(results, function(result) {
+	          var graphic = result.feature;
+	          switch (graphic.geometry.type) {
+	          case "point":
+	            graphic.setSymbol(markerSymbol);
+	            break;
+	          case "polyline":
+	            graphic.setSymbol(lineSymbol);
+	            break;
+	          case "polygon":
+	            graphic.setSymbol(polygonSymbol);
+	            break;
+	          }
+	
+	          map.graphics.add(graphic);
+	        });
+	         map.setExtent(esri.graphicsExtent(map.graphics.graphics).expand(1.5));
+       }else{
+       	alert("No location found");
+       };
+      };	
+				// var  idParams = new IdentifyParameters();
+			var popup = new Popup({
+			  fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+				new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+				  new Color([255, 0, 0]), 2), new Color([255, 255, 0, 0.25]))
+			}, domConstruct.create("div"));
+
+			map = new Map("map", {
+			  basemap: "hybrid",
+			  center: [-93.8899, 41.8119],
+			  zoom: 7
+			  //infoWindow: popup
+			});
+			//https://developers.arcgis.com/javascript/3/jssamples/graphics_create_circles.html
+			
+			esriBundle.widgets.Search.main.placeholder = "Enter address or place:\n50131   \n502 E 9th St. Des Moines\n43.1321 , -93.1892\nDubuque";  //use esriBundle to change the default placeholder in Search tool
+			var search = new Search({
+				enableInfoWindow: false,  //this will hide the result window
+				map: map,
+				//value:"Find a location",
+				autoNavigate: false  //has to do this to turn off the auto zoom in from the tool 
+			 }, "search");
+			 
+			 search.on("search-results", function(results) {
+			   map.centerAndZoom(results.results[0][0].feature.geometry, 16); // zoom to a level I can control
+			 });
+			 search.startup();
+			 
+			  ///Add Basemap Toggle
+			  /*
+			  toggle = new BasemapToggle({
+				map: map,
+				basemap: "topo"
+			  }, "BasemapToggle");
+			  toggle.startup();
+			 */
+			 geoLocate = new LocateButton({
+				map: map,
+				scale: 10000
+			  }, "locateBtn");
+			  geoLocate.startup();
+		 
+			map.on("load", function() {
+			
+
+          //after map loads, connect to listen to mouse move & drag events
+		  
+			  map.on("mouse-move", showCoordinates);
+			  //map.on("mouse-drag", showCoordinates);
+			  
+			 map.on("extent-change", function(evt) {
+			  document.getElementById("scale").innerHTML = "Current scale = 1:"+Number(map.getScale().toFixed(2)).toLocaleString();
+			  if (map.getScale()<20000){
+				$('#scale').css({'background-color':'blue', 'font-size':'1.0em'});
+				 //map.setMaxScale(20000);
+			  } else {
+				$('#scale').css({'background-color':'black', 'font-size':'1em'});
+			  }
+			  if (map.getScale()<200000) {
+				$('#legendIMG').hide();
+				} else {
+					$('#legendIMG').show();
+				}
+			});
+        });
+
+        function showCoordinates(evt) {
+          //the map is in web mercator but display coordinates in geographic (lat, long)
+          var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
+		  //var mp = webMercatorUtils.webMercatorToGeographic(endPoint);
+          //display mouse coordinates
+		  lat=0.000;
+		  lon=0.000;
+		  lat=mp.y.toFixed(4);
+		  lon=mp.x.toFixed(4);
+          dom.byId("info").innerHTML = mp.x.toFixed(4) + ", " + mp.y.toFixed(4);
+        }
+		
+		var scalebar = new Scalebar({
+          map: map,
+          // "dual" displays both miles and kilometers
+          // "english" is the default, which displays miles
+          // use "metric" for kilometers
+		  //attachTo: "bottom-center",
+          scalebarUnit: "english"//"dual"
+        }); //  },dojo.byId("scalebar"));
+
+		
+        //map.on("load", mapReady);  // stop running the identify 
+		
+		
+		//added line for creating a circle 
+		var circleSymb = new SimpleFillSymbol(
+          SimpleFillSymbol.STYLE_NULL,
+          new SimpleLineSymbol(
+            SimpleLineSymbol.STYLE_SHORTDASHDOTDOT,
+            new Color([115, 0, 70]),
+            5
+          ), new Color([255, 255, 0, 0.25])
+        );
+
+		var graphicsLayer = new GraphicsLayer();
+		map.addLayer(graphicsLayer);
+		
+		//var flag = false;
+		 map.on('click', function(e) {
+			
+			if (map.getScale() > 20000){
+			alert("Please zoom in until you see the current map scale at lower left\nturn blue or the scale bar showing 0.2mi or smaller; then click to add your project point.");
+				return false; 
+			}
+			
+			if ($('input[type=checkbox]').is(":checked")==false) {
+		  
+			alert('You must select a project first!');
+			return false; //this will stop running of the code 
+			} 
+			/*
+			if (document.getElementById("email").value==""){
+				alert('You must enter an email!');
+			return false;
+			} */
+			
+			//console.log(map.getScale());
+			
+			
+			map.graphics.clear();
+			//console.log(e);
+			
+			var mapPoint = e.mapPoint,
+				symbolSize = 14,
+				lineColor = new Color([255, 255, 255]),
+				fillColor = new Color([164, 66, 244, 0.75]),
+				line = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+					lineColor, 3),
+				sms = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,
+					symbolSize, line, fillColor),
+				graphic = new Graphic(mapPoint, sms);
+				
+				startPoint = graphic.geometry;  
+				
+				map.graphics.add(graphic);
+				
+				createCircle();
+				 
+				// Make the shape moveable  
+			var dojoShape = graphic.getDojoShape();  
+			moveable = new dojox.gfx.Moveable(dojoShape);  
+			
+			//clear the circle graphic first
+			 dojo.connect(moveable, "onMoveStart", function(mover) {
+				graphicsLayer.clear();
+			   });
+			  
+			// Update the geometry at the end of move  
+			var moveStopToken = dojo.connect(moveable, "onMoveStop", function(mover) {  
+			  // Get the transformation that was applied to   
+			  // the shape since the last move  
+			  var tx = dojoShape.getTransform();  //defined on top 
+				
+			  //startPoint = graphic.geometry;  
+			  endPoint = map.toMap(map.toScreen(startPoint).offset(tx.dx, tx.dy));  
+				
+			  // clear out the transformation  
+			  dojoShape.setTransform(null);  
+			  //setGeometry(endPoint);
+			   
+			  // update the graphic geometry  
+			  graphic.setGeometry(endPoint);  
+			  startPoint=endPoint;  //important, otherwise, the endPoint will jump. 
+			  
+			  createCircle();
+			 });
+			 
+				//createCircle();
+			 
+				/*
+				circle = new Circle({
+					center:  e.mapPoint,
+					geodesic: true,
+					radius: 100,
+				   // radiusUnit: "esriMiles"
+				   radiusUnit: "esriFeet"
+				});
+			  // var graphic = new Graphic(circle, circleSymb);  //hide the circle 
+				//map.graphics.add(graphic);  */
+			});  
+			
+	function createCircle(){
+			//map.graphics[1].clear();
+			graphicsLayer.clear();
+			circle = new Circle({
+					center: startPoint,//e.mapPoint,
+					geodesic: true,
+					radius: 100,
+				   // radiusUnit: "esriMiles"
+				   radiusUnit: "esriFeet"
+				});
+			   var graphic2 = new Graphic(circle, circleSymb);  
+			   //map.graphics.add(graphic2);
+			   //graphicsLayer.add(graphic2); //circle will show on map 
+				//graphicsLayer.redraw();
+		}
+
+		
+		var streetLabel="https://gis.iowadot.gov/public/rest/services/Basemap/Basemap_LabelsOnly/MapServer"
+        var floodURL = "https://programs.iowadnr.gov/geospatial/rest/services/Projects/floodplainsection/MapServer";
+		var fema="https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHLWMS/MapServer";
+		//var hazard="https://programs.iowadnr.gov/geospatial/rest/services/SurfaceWaters/FloodHazardAreas/MapServer";
+		
+		var stream =new ArcGISDynamicMapServiceLayer("https://programs.iowadnr.gov/geospatial/rest/services/Hydrography/Stream_Centerlines/MapServer");
+		
+         map.addLayer(new ArcGISDynamicMapServiceLayer(streetLabel));
+		 
+		 map.addLayer(stream);
+		 stream.setVisibleLayers([0]); //turn on the layer
+		
+		 //map.addLayer(new ArcGISDynamicMapServiceLayer(fema));
+		map.addLayer(new ArcGISDynamicMapServiceLayer(fema,
+          { "visible":false}
+		  )); 
+		  
+		 // map.addLayer(new ArcGISDynamicMapServiceLayer(hazard,
+         // {"visible":false, "opacity": 0.25 }));
+		  
+		  map.addLayer(new ArcGISDynamicMapServiceLayer(floodURL,
+          {"opacity": 0.90 }));
+		
+	   function mapReady () {
+         //map.on("click", executeIdentifyTask);
+		  	 
+		 
+          //create identify tasks and setup parameters
+          identifyTask = new IdentifyTask(floodURL);
+
+          identifyParams = new IdentifyParameters();
+          identifyParams.tolerance = 5;
+          identifyParams.returnGeometry = false;
+          identifyParams.layerIds = [1,2,4,5,10,11,13,14]; //flowaccsqmi(layer 6 is taken off,  just use layer 10-DA polygon) 
+          identifyParams.layerOption = IdentifyParameters.LAYER_OPTION_ALL;  //redundancy with the layerIds. 
+          identifyParams.width = map.width;
+          identifyParams.height = map.height
+		  //identifyParams.geometry = graphic.geometry;
+		  //identifyParams.geometry =circle.getExtent();
+          identifyParams.mapExtent = map.extent;
+		  
+		  ///code added to identify floodURL again using point 
+		  identifyTask2 = new IdentifyTask(floodURL); //for the fema url 
+          identifyParams2 = new IdentifyParameters();
+          identifyParams2.tolerance = 5;
+          identifyParams2.returnGeometry = false;
+          identifyParams2.layerIds = [4]; //flowaccsqmi(layer 6) 
+          identifyParams2.layerOption = IdentifyParameters.LAYER_OPTION_ALL;
+          identifyParams2.width = map.width;
+          identifyParams2.height = map.height; 
+		  identifyParams2.mapExtent = map.extent;
+		  
+		identifyTask3 = new IdentifyTask(fema); //for the fema url 
+          identifyParams3 = new IdentifyParameters();
+          identifyParams3.tolerance = 3;
+          identifyParams3.returnGeometry = false;
+          identifyParams3.layerIds = [0,3,28]; //flowaccsqmi(layer 6)
+          identifyParams3.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
+          identifyParams3.width = map.width;
+          identifyParams3.height = map.height;
+		  identifyParams3.mapExtent = map.extent;
+
+		   //alert(identifyParams3.layerIds);
+		   
+		    executeIdentifyTask();
+        }
+
+        function executeIdentifyTask (event) {
+		//identifyParams.geometry =event.mapPoint;
+		//console.log(startPoint);
+		//console.log(endPoint);
+		 if (endPoint!=null) {  //set Params2's geometry to the point
+			  identifyParams2.geometry = endPoint;
+			  //identifyParams3.geometry = endPoint;
+			  } else{
+				identifyParams2.geometry = startPoint;
+				//identifyParams3.geometry = startPoint;
+		  } 
+		  
+		  //using circle for both identifyParams' geometry
+		  identifyParams.geometry =circle.getExtent(); 
+		  identifyParams3.geometry = circle.getExtent(); 
+		
+		 var da = 0.00;
+		 var ds = 0.00;
+		 var inCity="";
+
+		 var communityName ="Unavailable";
+		 var manager = "Unavailable";
+		 var phone ="Unavailable";
+		 var email ="Unavailable"; 
+		 var panel="Unavailable";
+		 var femaMapType ="Unavailable";
+		 var fldZone = "Unavailable";
+		 var studyId = "Unavailable";
+		 var fis = "Unavailable";
+		 var cityName = "Unavailable";
+		 var mappedFloodWay = "Unavailable";
+		 var address = "Unavailable";
+		 var address1 = "Unavailable";
+		 var delegated = "Unavailable";
+		 var zip = "Unavailable";
+		 var localPermit = "Unavailable";
+		 var statePermit = "Unavailable";
+		 var ppd = "Unavailable";
+		 var mapType = "Unavailable";
+		 var detailedIS = "Unavailable";
+		 var localCP = "Unavailable";
+		 /*
+		var userName = $("#name").val();
+		var userStreet = $("#street").val();
+		var userCity = $("#city").val();
+		var userState = $("#code").val();
+		var userZip = $("#zip").val();
+		var userPhone = $("#phone").val();
+		var userEmail = $("#email").val(); */
+		var d = new Date();
+		
+	    var noNFIP;
+	    var insideFloodPlain;
+		var outsideFloodplainFema; 
+		var noLocalMap;
+		var noFemaMap; 
+		var InsideDockNoPermitBoundary;// = "No";
+		var DA;
+		var DA_available; 
+		var Have_DA; 
+		var unit=' square miles';
+		var inRibbon; 
+		var insideRibbonMessage="You are close to city/city, city/county boundaries, you should contact both cities and/or counties for permit information";
+		var protectedStream =false; 
+		var fZonelist =""; 
+		var nfipList =[];
+		 
+		
+		 pame =$('input[type="checkbox"]:checked').val();
+		 var pName=$('label[for="'+pame+'"]').text();//console.log ("pName: "+pName);
+		   
+		   var allProjects;
+		   var allChecked = $('input[type="checkbox"]:checked');
+		   var pP;
+		   
+		   allChecked.each(function(){
+			var selectedValue = $(this).val();
+			allProjects += $('label[for="'+selectedValue+'"]').text()+","; //add "," in between project names
+		   });
+		   /*
+		   allProjects= $('input[type="checkbox"]:checked').map(function() { 
+		   //return $(this).attr('value').toString(); 
+		   return $('label[for="'+pame+'"]').text();
+		   }).get().join(",");
+		  
+		  
+		  for (i=0; i<allChecked.length; i++) {
+			pP=$(':checkbox')[i].nextSibling.nodeValue;
+			allProjects += pP+', ';//console.log (pName);
+		  }   */
+		  
+		  var bridgeType = $("input[type='radio'][name='bridge1']:checked").val();
+		  var contours = $("input[type='radio'][name='pipe']:checked").val();
+		  var stabilization = $("input[type='radio'][name='measure']:checked").val();
+		  var dockFloat = $("input[type='radio'][name='dock']:checked").val();
+			
+		function insideRibbon() {
+			if (inRibbon=="Yes" && insideFloodPlain=="Yes") {
+				localPermit="YES";
+				//return insideRibbonMessage;
+			}  else {
+				localPermit="NO";
+				
+			}
+		
+		}
+			
+		 function getLocalPermit(){
+			
+			if (localCP ==="Yes" && insideFloodPlain === "Yes"){  //within mapped floodplain and participate in community  edited 6/26/2017
+				localPermit = 'YES';
+			} 
+			else if (localCP ==="Yes" && (insideFloodPlain === "Unavailable" || insideFloodPlain === undefined)) {
+				//if (localCP==="Unavailable") {
+					localPermit = 'YES';
+			} 
+			
+			else {
+				localPermit = 'NO';
+			}
+			/*
+			else if  (insideFloodPlain === "Yes" && inRibbon=="Yes"){
+					insideRibbon(); 
+				} 
+			
+			else {
+				localPermit = 'NO';
+				}
+			*/
+			//return localPermit;
+		 }
+		 
+		 function insideCity(){
+			
+				if(da < 2.00){
+					statePermit = "NO";
+					getLocalPermit();
+				}			
+				else {//console.log ("da > 2.0: "+da);
+				
+				statePermit = "YES";
+				getLocalPermit();
+				}
+			  } 
+			  
+		function outsideCity(){
+			if (pName.search("Pipeline") < 0) {
+				if(da < 10.00) {
+					statePermit = "NO";
+					getLocalPermit();
+				}
+				else {
+					statePermit = "YES";
+					getLocalPermit();
+				}
+			} else {  //handle pipeline crossing 
+				if(da < 100.00) {
+					statePermit = "NO";
+					getLocalPermit();
+				}
+				else {
+					statePermit = "YES";
+					getLocalPermit();
+				}
+			}
+		 }  
+		function BridgeOutside() {//used for bridge only
+		 
+		    if (bridgeType =="No") {
+				
+				if (da < 10.00){
+					statePermit = "NO";
+					getLocalPermit();
+				}
+				else {
+					statePermit ="YES";
+					getLocalPermit();
+				}
+			} else { //bridgeType is Yes across river//console.log (da);
+				if (da < 100.00){
+				statePermit = "NO";
+				getLocalPermit();
+				} else { //DA over 100
+					statePermit = "YES";
+					getLocalPermit();
+				}
+			 }	
+			
+			
+		}
+		
+		function boatPermit() {
+			//if (pName.search('Boat')>=0) {
+							//check to see if you are on Mississippi or Missouri river or the 4 reservoir or not:
+							
+				if (InsideDockNoPermitBoundary==="Yes"){//console.log (InsideDockNoPermitBoundary);
+					//console.log("Inside water bodies that require no permit!");	
+					statePermit = "NO";//console.log (statePermit);
+					getLocalPermit();
+					//goResult(); //go to result directly for boat
+					//return false; //stop running everything else
+					
+				 }
+				 else {
+				//boat dock logic here,  area and float or not//console.log (dockFloat);
+					if (dockFloat ==='No'){
+						statePermit = "YES";
+						getLocalPermit();
+					 
+					} 
+					else {
+					statePermit = "NO";
+					getLocalPermit(); 
+					}
+					//goResult(); //go to result directly for boat
+					//return false; //stop running everything else
+				}
+			 // }	
+			}
+		 
+       //var deferred = 
+	   identifyTask
+            .execute(identifyParams)
+            .addCallback(function (response) {//console.log ("Identify Task Response", response);//console.log (response.length);
+			
+			///Newly added to checking missing layers
+				var allLayers = []; 
+				
+				for (var i = 0, il = response.length; i < il; i++) {
+					var idResult = response[i];
+					allLayers.push(idResult.layerId);
+					//console.log(idResult.layerId);//console.log (idResult);
+				}//console.log (allLayers);
+				
+				/*
+				if (allLayers.indexOf(4) < 0 ){
+					noNFIP ="Yes";//console.log ("NFIP status map is not available here!");
+				} */
+				
+				 // we don't use 100 year flood zone,  just use the DA area according to Chad 6/27/20`7
+				 
+				 /*
+				 if (allLayers.indexOf(14) < 0 ) {  //outside ribbon//console.log ("Outside Ribbon");
+					inRibbon = "No";
+					
+					//statePermit = "NO";
+					//localPermit = "NO";
+					//goResult(); //do to result directly
+					//return false;
+				 }  else {  //added: edited 6/26/2017
+					inRibbon = "Yes";  
+					insideRibbon();
+				 }   */
+			   
+			  
+				/*
+				if (allLayers.indexOf(10) < 0){
+					//alert("Drainage Area not available yet at this location.\nYou need apply for a permit");
+					da ="Drainage Area not available at this location"; 
+					statePermit="YES";
+						//goResult(); 
+					    //return false;
+				} */
+				
+				
+				if (allLayers.indexOf(11) < 0){
+					
+					InsideDockNoPermitBoundary = "No";//console.log (InsideDockNoPermitBoundary);
+					boatPermit();
+					//goResult(); //jump to result directly 
+					//statePermit = "NO";
+					//localPermit = "NO";
+				 } else {
+				  InsideDockNoPermitBoundary = "Yes";//console.log ("Inside no boat dock permit waterbody!");
+					boatPermit();
+				 }  
+				
+				if (allLayers.indexOf(1) >= 0){
+					protectedStream =true; 
+				}  
+			/// end missing layer checking
+
+			 if(response[0].feature.length == 0) {
+				console.log ("no results for the first identify task.");}
+		//if(response[0].layerName === "NFIP Status" || response[0].layerName === "USGS Gages"
+			else {
+              // response is an array of identify result objects
+              // Let's return an array of features.
+              return arrayUtils.map(response, function (result) {//console.log ("Identify Result", result);
+                var feature = result.feature;
+                var layerName = result.layerName;
+				var layerid = result.layerId;
+				
+
+				feature.attributes.layerId = layerid;
+				/*
+				for (var i = 0, il = result.length; i < il; i++) {
+					alert (result[i].layerId);
+				}  				  
+
+				*/
+				 
+                 if (layerid === 4) { 
+				  //console.log("Got NFIP layer!");
+                 ////console.log (feature.attributes.City__FPM_);
+				 ////console.log (feature.attributes.COMMUNITY_NAME);
+				 ////console.log (feature.attributes.FLOODPLAIN_MANAGER);
+				  
+				  cityName = feature.attributes.City__FPM_;
+				  
+				  delegated = feature.attributes.Delegated;
+				  communityName = feature.attributes.COMMUNITY_NAME;
+				  phone = feature.attributes.TELEPHONE_NUMBER__FPM_;
+				  manager =feature.attributes.FLOODPLAIN_MANAGER;
+				  email = feature.attributes.email__FPM_;
+				  address = feature.attributes.ADDRESS__FPM_ ;
+				  address1 = feature.attributes.Address1__FPM_ ;
+				  zip = feature.attributes.Zip__FPM_ ;
+				  ppd = feature.attributes.PROGRAM_PHASE_DESCRIPTION;
+				  mapType = feature.attributes.map_type;
+				  
+				  //console.log(manager); 
+				  //console.log(communityName);
+				  if (manager===""){manager = "No Contact Person";}  //has to use ""  not " "
+				  if(address===""){address="No Address";}
+				  if(cityName===""){cityName="No City Name";}
+				  if(zip===""){zip="Zip Code";}
+				  if(email===""){email="No Email";}
+				  if(phone===""){address="No Phone";}
+				  
+				//console.log(manager);
+				//console.log(email);
+				  nfipList.push(" "+manager, " "+address, " "+cityName, " IA "+zip, " "+email, " "+phone);
+				  console.log ("Communities: "+nfipList);
+				  
+				  if (ppd.toUpperCase() =="EMERGENCY" || ppd.toUpperCase() =="REGULAR") {
+					localCP = "Yes";
+				  } else {
+					localCP = "No";
+				  }
+				  
+				  if (mapType === 'Detailed Study'){
+					detailedIS = "Yes";
+				  }
+				  
+				}
+				  
+				 if ( layerid ==10) {	
+					
+						da = feature.attributes.MAX_DRAIN; 
+						var pStream = feature.attributes.TARGET_FID;
+						//console.log(pStream);
+							if(pStream === "1"){
+								 protectedStream = true; 
+							}
+						
+						if (da==-999999) {
+							da = 999.99; 
+						}
+					}	
+					
+					
+					if ((pName.search('Levees') >= 0) || (pName.search('Waste')>=0) || (pName.search('Excavations')>=0) || (pName.search('Structures')>=0) || (pName.search('Bank')>=0) || (pName.search('Sanitary')>=0)){
+						
+						if (ds < 0.1) {   //ds is 0.000000, if we use ===, then it won't match!
+							insideCity();
+						  } else {
+							outsideCity();
+						}
+					
+					} 
+					
+					if ((pName.search('Channel') >= 0) || (pName.search('Dam')>=0) || (pName.search('Animal')>=0) || (pName.search('Buildings')>=0)){
+						//these four project require State and Local Permit anyway//console.log (pName);
+						statePermit="YES";
+						//localPermit="YES";
+						getLocalPermit();
+						//goResult();
+					}
+					
+					if (pName.search('Boat')>=0) {
+						boatPermit();
+					}
+					
+					
+						if (pName.search('Bridge') >= 0) { //bridge
+						//console.log(ds);
+							if (ds < 0.1) {  //ds<=0.01
+								insideCity();
+							} else {
+							BridgeOutside();
+							}
+						  
+						}
+						
+						//pipelineCall(); 
+						
+						if (pName.search('Pipeline') >= 0){
+							//console.log(fldZone);
+							
+							if (contours == "Yes") {
+								if (stabilization==="Yes"){
+								
+								statePermit = "NO";
+								getLocalPermit();
+								}
+								else {  //stabilization is No
+								////console.log (stabilization);
+								statePermit = "YES";  
+								getLocalPermit();
+								}
+							}	
+							else { //contours is No
+								//statePermit = "No"; 
+								if (ds < 0.1) {
+									insideCity();
+								} else { //ds > 0
+									outsideCity(); 
+								/*
+									if (da >= 100.00){
+										statePermit = "YES";
+										getLocalPermit();
+									} else {//(da < 100.00 && ds > 0.00){
+										 statePermit = "NO";
+										 getLocalPermit();
+									} */
+							  }
+							}	
+						  //}
+						}    
+					
+				
+				
+				
+				/*
+				else if (layerid ==11 ) {	//boat 
+					//statePermit = "NO";
+					InsideDockNoPermitBoundary = "Yes";
+					boatPermit();
+				
+				} */
+				
+				if (layerid ==13) {	
+					//console.log(allLayers.indexOf(10));
+					Have_DA = feature.attributes.Have_DA;//console.log ("Have DA: "+Have_DA);
+					if (Have_DA==="No"){
+					insideFloodPlain="Unavailable";
+					//alert("DA polygon missing here")
+					if (InsideDockNoPermitBoundary=="Yes") {  //for boat permit
+						statePermit="NO";
+					} else {
+						statePermit="YES";
+					}
+						getLocalPermit();
+						da='Unavailable';
+						unit = '';
+						goResult();
+						return false; 
+					} else {
+						if (allLayers.indexOf(10) < 0) {
+						insideFloodPlain="No";
+						//alert("You are outside FloodPlain!");
+						da =" less than 2"; 
+						statePermit="NO";
+						//console.log(statePermit);
+						getLocalPermit();
+						goResult(); 
+					    //return false;
+						} else {  //Have_DA is yes and clicked inside DA polygon
+							insideFloodPlain="Yes";
+						  }
+					}
+				
+				} 
+								
+				if (layerid==14){
+					inRibbon="Yes"; 
+					//insideRibbon();
+					//insideRibbonMessage="You are close to city/city, city/county boundaries, you should contact both cities and/or counties for permit info";//console.log ("You are inside Ribbon");
+					//return insideRibbonMessage;
+				} 
+				
+				if (layerid==5) { // layer 5//console.log (feature);//console.log (feature.attributes['Pixel Value']);
+                  //alert("Got city distance layer!");
+				  ds = feature.attributes['Pixel Value']; //has to be this format to return the raster pixel value://console.log ("DS in meters: "+ds);
+				  
+				  //console.log ("DS is: "+ds);
+				  ds = (ds/1609).toFixed(2);  //convert from meter to miles//
+				  //console.log ("DS after: "+ds);
+				  if (ds == undefined) {
+					ds =" > 2 miles"; 
+				  }
+				  if (ds > 0 || ds ==undefined) {
+					inCity = "No";
+				  }
+				  else {
+				  inCity = "Yes";
+				   }
+                }
+				
+				goResult();
+				
+				return feature;
+				
+				});
+			  }
+           }).then(function(){
+	
+		   
+		  /// if we use circle as identify geometry,  identify will return all features within the radius of the circle, give different result. 
+			//identifyParams3.geometry =circle.getExtent();  
+			//identifyParams3.mapExtent = map.extent;
+		  
+          var deferred3 = identifyTask3
+            .execute(identifyParams3)
+            .addCallback(function (response3) {
+              // response is an array of identify result objects
+              // Let's return an array of features.
+              return arrayUtils.map(response3, function (result3) {
+                var feature3 = result3.feature;
+                var layerName3 = result3.layerName;
+				var layerid3 = result3.layerId;
+				
+				feature3.attributes.layerId = layerid3;
+				
+				/////////////////////////////////////////////////////////////////////////////
+				//function pipelineCall() {
+				 
+						  
+						 /* else { //not in AE zone
+							if (contours == "Yes") {
+								if (stabilization==="Yes"){
+								statePermit = "YES";
+								getLocalPermit();
+								}
+								else {  //stabilization is No
+								////console.log (stabilization);
+								statePermit = "NO";  
+								getLocalPermit();
+								}
+							}	
+							else { //contours is No
+								//statePermit = "No"; 
+								if (ds ==0.00) {
+									insideCity();
+								} else { //ds > 0
+									if (da >= 100.00){
+										statePermit = "YES";
+										getLocalPermit();
+									}
+										else {//(da < 100.00 && ds > 0.00){
+										 statePermit = "NO";
+										 getLocalPermit();
+								}
+							  }
+							}	
+						  } */
+					//	}
+				//}
+				///////////////////////////////////////////////////////////////////////////
+				
+                if (layerid3 === 3) { //"FIRM Panels"
+					panel=feature3.attributes.FIRM_PAN;
+                    //console.log(feature3.attributes.FIRM_PAN);
+				   if (panel != "Unavailable") {
+					femaMapType = "Digital";
+				   } else {femaMapType = "Paper";}
+                //  var StatusTemplate = new InfoTemplate("",
+                //    "FIRM Panel: ${FIRM_PAN}");
+                //  feature3.setInfoTemplate(StatusTemplate); 
+				  }
+				  
+				  
+				if (layerid3 === 28){ 
+					//console.log(feature3.attributes.FLD_ZONE);
+					//console.log(feature3.attributes);
+					fldZone=feature3.attributes.FLD_ZONE;
+					
+					fZonelist += fldZone+",";//console.log (fZonelist);
+					
+					if(fldZone ==='AE'){
+						fis = "Yes";
+					} else {
+					
+						fis = "No";
+					}
+						//mappedFloodWay ="Yes"; this always the same as fis
+					//} else if (fldZone==null || fldZone == 'undefined'){
+					//		fis='Unvailable'; 
+					//	}
+					
+				}
+				if (layerid3 === 0){ 
+					studyId = feature3.attributes.STUDY_ID;
+				}	
+				
+				goResult();
+				
+				return feature3;
+        	  
+			});
+		
+		});
+		
+		identifyTask2
+            .execute(identifyParams2)
+            .then(function (response2) {
+			 return arrayUtils.map(response2, function (result2) {//console.log ("Identify Result", result2);
+                var feature2 = result2.feature;
+                var layerName2 = result2.layerName;
+				var layerid2 = result2.layerId;
+				
+				feature2.attributes.layerId = layerid2;
+				
+				if (layerid2 === 4) { 
+				 ////console.log (feature.attributes.COMMUNITY_NAME);
+	
+				  communityName = feature2.attributes.COMMUNITY_NAME;
+				}//console.log (communityName);
+				
+				goResult();
+				///loriSummary();
+				
+				return feature2;
+			});
+		});
+		
+		//begin of fourth identify
+		
+		  identifyTask4 = new IdentifyTask(fema); //for the fema url 
+          identifyParams4 = new IdentifyParameters();
+          identifyParams4.tolerance = 5;
+          identifyParams4.returnGeometry = false;
+          identifyParams4.layerIds = [28]; //flowaccsqmi(layer 6)
+          identifyParams4.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE;
+          identifyParams4.width = map.width;
+          identifyParams4.height = map.height;
+		  identifyParams4.mapExtent = map.extent; 
+		  if (endPoint!=null) {
+			  identifyParams4.geometry = endPoint;
+			  } else{
+				identifyParams4.geometry = startPoint;
+		  }  
+		  
+		  identifyTask4
+            .execute(identifyParams4)
+            .then(function (response4) {
+			 return arrayUtils.map(response4, function (result4) {//console.log ("Identify Result", result4);
+                var feature4 = result4.feature;
+                var layerName4 = result4.layerName;
+				var layerid4 = result4.layerId;
+				
+				feature4.attributes.layerId = layerid4;
+				
+				if (layerid4 === 28) { 
+	
+				 fldZone=feature4.attributes.FLD_ZONE;
+				}//console.log (fldZone);
+				
+				goResult();
+				///loriSummary();
+				
+				return feature4;
+			});
+		});
+		  
+		//End of fourth identify
+	  
+	 });// End of all identify 
+		
+	//goResult();
+	
+	 function goResult(){
+		
+		if (allChecked.length > 1) {
+			statePermit = "YES";
+			//localPermit = "YES";
+			
+			var allP =allProjects.replace('undefined','');
+			pName = allP.substring(0, allP.length-1); //get rid of the ","
+		}//console.log (fZonelist);
+		if (fldZone !== "AE" && fZonelist.search("AE")>=0){
+				//alert("AE found within 100 ft");
+				fldZone = "AE";
+				fis = "Yes";
+		}	
+		if (fldZone=="AE") {
+				if (pName.search('Pipeline') >= 0){   //In AE zone,  pipeline permit changes.//console.log (fldZone);
+								if (contours == "Yes" && stabilization==="Yes"){
+									statePermit = "YES";
+									//getLocalPermit();
+								}
+								else if (contours == "Yes" && stabilization==="No"){
+									statePermit = "NO";
+									//getLocalPermit();
+								}
+								
+								else if (contours == "NO" && stabilization==="No"){
+									statePermit = "YES";
+									//getLocalPermit();
+								}
+								
+								else {  //(contours == "No" && stabilization==="Yes")
+									statePermit = "YES";
+									//getLocalPermit();
+								}
+								
+						  
+				        } 
+				else if (pName.search('Levees') >= 0 || pName.search('Waste')>=0 || pName.search('Excavations')>=0 || pName.search('Structures')>=0 || (pName.search('Bank')>=0) || pName.search('Sanitary')>=0 || pName.search('Bridge') >= 0){
+					statePermit = "YES";
+				}
+		}
+		
+
+		if (fldZone =="AE" || fldZone==="A"){
+			insideFloodPlain = "Yes";
+		}
+		
+		if (da==="Unavailable"){
+			da ="Drainage Area not available at this location"; 
+		}
+		
+		if (insideFloodPlain==='No'){
+			statePermit = 'NO';
+		}
+		
+		//the following require file state permit anyway,  regardless of inside or outside floodplain
+		if ((pName.search('Channel') >= 0) || (pName.search('Dam')>=0) || (pName.search('Animal')>=0) || (pName.search('Buildings')>=0)){
+			statePermit = "YES";
+		}   
+		
+		
+		//reset lat lon, SINCE 	user may have moved the point 
+		var mp = webMercatorUtils.webMercatorToGeographic(startPoint); 
+		  //var mp = webMercatorUtils.webMercatorToGeographic(endPoint);
+          //display mouse coordinates
+		  lat=0.000;
+		  lon=0.000;
+		  lat=mp.y.toFixed(4);
+		  lon=mp.x.toFixed(4);
+		  
+		 var sp;
+		 var mm="This project is on Mississippi or Missouri River.";
+		 
+		 
+		 if (da==-9999 || da==999.99) {
+				da = " > 10,000 ";
+				if (pName != 'Boat Docks') {
+				statePermit = "YES";
+				
+				} else {
+					if (InsideDockNoPermitBoundary=="Yes") {
+					statePermit = "NO";
+					} else {
+						statePermit = "YES";
+						}
+				}
+			}//console.log ("Final statePermit: "+statePermit);//console.log (n+=1);
+			
+			
+		 
+		  spTextYes =
+			"<p style='font-size:1.35em;'>Do I need to apply for a State Flood Plain Permit? <prep><b style='font-size:1.5em;'>&nbsp; "+ statePermit +"</b></prep>"+
+			"<br><b>Please fill out and submit a <a  href='https://www.iowadnr.gov/Environmental-Protection/Land-Quality/Flood-Plain-Management/Flood-Plain-Dev-Permits/' target='_blank'><u>Joint Application</u></a>" +
+			"  to apply for a flood plain permit.</b><br>"+
+			"For questions call: <a href='tel:866-849-0321'><u>866-849-0321</u>.</a>";
+		  
+		  //http://www.iowadnr.gov/Environmental-Protection/Land-Quality/Animal-Feeding-Operations
+		  
+		  if (statePermit === "YES") {
+			 sp = spTextYes;
+			   if (da == " > 10,000 ") {
+					sp = spTextYes +"  (" +mm+")"
+				}
+				
+				if (pName.search('Animal')>=0){
+					sp = spTextYes + " (Here is the link to:  <a href='http://www.iowadnr.gov/Environmental-Protection/Land-Quality/Animal-Feeding-Operations' target='_blank'><u>Animal Feeding Operation</u></a>).";
+				}
+			} 
+			
+			else {
+			/*
+				if (ds <= 0.01) {//console.log ("DS: "+ds);
+					sp=spTextYes + "<br>" +
+					"Your project is very close to city limit, please file application to be sure."
+			   } else { */
+				sp= "<p style='font-size:1.35em;'>Do I need to apply for a State Flood Plain Permit? <prep><b style='font-size:1.5em;'>&nbsp; "+ statePermit +"</b></prep><br>"+
+				"Save and print a copy of these results for your records and have a copy on-site during projection construction. " +
+				"<br>If you would like an official response regarding flood plain approval from the Iowa DNR,"+
+				" then submit a <a  href='https://www.iowadnr.gov/Environmental-Protection/Land-Quality/Flood-Plain-Management/Flood-Plain-Dev-Permits/' target='_blank'><u>Joint Application</u></a>.<br>"+
+				"For questions call: <a href='tel:866-849-0321'><u>866-849-0321</u>.</a>";
+			//"Flood Plain Help Line at &nbsp; <b>866-849-0321</b>.</p>";
+				//}
+			}
+			
+			if (inRibbon=="Yes") {
+				if (insideFloodPlain=="No" && localCP =="No"){ //localPermit =="NO") {
+					//insideRibbonMessage ='';
+					localPermit = 'NO';//console.log (localPermit);
+				} 
+				
+				else if (insideFloodPlain=="Yes" && localCP =="No"){
+					localPermit = "YES";  // NO but maybe
+				}
+				
+				else {  // (insideFloodPlain=="Yes" && localPermit=="NO")
+					localPermit = 'YES';  //Yes and more 
+				 }
+			} 
+			
+			if (insideFloodPlain=="Yes" && localCP =="Yes"){
+					localPermit = "YES";
+				}
+			
+			if (localCP==="No"){
+					localPermit = "NO";
+				}
+				
+			var comm; 
+			
+			/*
+			//console.log(nfipList[0]); get rid of the "," at the beginning of each contact
+			if(nfipList[0] ===" " ) {  // has to use " ". not "",  different from line 984 since this is array, that is string 
+				nfipList.splice(0,1,"No Contact Person");
+			}
+			if(nfipList[6] ===" " ) {
+				nfipList.splice(6,1,"No Contact Person");
+			}
+			
+			if(nfipList[4] ===" " ) {
+				nfipList.splice(4,1," No Email");
+			}
+			*/
+			//nfipList = nfipList.replace(/^,+/,""); //get rid of the "," at the beginning
+			if (nfipList.length > 6 && nfipList.length<13) {
+				comm = "1. "+nfipList.slice(0,6)+"<br>" + "2. "+nfipList.slice(6,12);
+			} else if (nfipList.length>13 && nfipList.length<19){
+				comm = "1. "+nfipList.slice(0,6)+"<br>2. "+nfipList.slice(6,12)+"<br>3. "+nfipList.slice(12,18);
+			} else if (nfipList.length>19){
+				comm = "1. "+nfipList.slice(0,6)+"<br>" + "2. "+nfipList.slice(6,12)+"<br>3. "+nfipList.slice(12,18) +
+				"<br>" + "4. "+nfipList.slice(18,24);
+			} else {comm = nfipList;}//console.log (manager);//console.log (communityName);
+			
+			if (nfipList.length < 2) {
+				comm = "<i>(Contact information unavailable for this location)</i>";
+			}
+			
+			var lp;  //add page break here.  
+			var lptxt = "<p style='font-size:1.35em;'>Do I need to apply for a city or county local flood plain permit? <prep><b style='font-size:1.5em;'>&nbsp; "+localPermit+"</b></prep><br>";
+			//console.log(insideRibbonMessage);  //if (insideFloodPlain=="Yes")
+			//console.log("local permit: "+localPermit);
+			if  (localPermit=="YES") {
+				//console.log(insideRibbonMessage);
+				//console.log("Manager: "+manager);
+				//if ((manager==="Unavailable" && communityName==="Unavailable") || (manager=='')) {
+				if (nfipList.length < 2) {
+				  if (inRibbon==="Yes") { 
+					lp = lptxt+
+					"<b style='color:blue;'>"+insideRibbonMessage+"</b>"+
+					//"<br>Contact your city and/or county Flood Plain Manager:<br>"+
+					"<h4 style='color: blue'>Sorry we don't have contact information available for this location. You need to check with you local authority</h4>"+
+
+					+"</p>";
+					//
+					} else {
+						lp = lptxt +
+						"<p style='color: blue'>Sorry we don't have contact information available for this location. You need to check with you local authority</p>"+
+						"<br>"+
+						//"<p></p>"+
+						"If you are close to a city or county border, please check with both the city and county for potential permits.</p>"; //<b style='font-size:1.5em;'>
+					 }
+				} else {
+					if (inRibbon==="Yes") { 
+					lp = lptxt+
+					
+					"<b style='color:blue;'>"+insideRibbonMessage+"</b>"+
+					"<br>Contact your city and/or county Flood Plain Manager:<br>"+
+					/*
+					 communityName+"<br>"+
+					 manager +"<br>"+
+					 address +"<br>"+
+					 //address1 +"<br>"+
+					 cityName +", IA "+zip+"<br>"+
+					 email +"<br>"+
+					 phone +"<br>"+ */
+					comm+"</p>";
+					
+					}  else {
+						lp = lptxt+
+						"Contact your city and/or county Flood Plain Manager:<br>"+
+						comm+"</p>";
+						/*
+						 communityName+"<br>"+
+						 manager +"<br>"+
+						 address +"<br>"+
+						 //address1 +"<br>"+
+						 cityName +", IA "+zip+"<br>"+
+						 email +"<br>"+
+						 phone +"<br>"+
+						 "If you are close to a city or county border, please " +
+							"check with both the city and county for potential permits.</p>"; */
+					}
+				}
+			 } else {
+				/*
+				if (localPermit == 'NO but maybe'){
+					lp="<p style='font-size:1.35em;'>Do I need to apply for a city or county local flood plain permit? <prep><b style='font-size:1.5em;'>&nbsp; "+localPermit+"</b></prep><br>"+
+				 +"<b style='color:blue;'>"+insideRibbonMessage+"</b>"+
+				"<b>Contact your city and county zoning offices to verify that they do not require construction permits for this project.</b><br />" +
+				"If you are close to a city or county border, please check with both the city and county for potential permits.</p>"; 
+				}  
+				else {  
+					localPermit = "NO";  */
+				if (inRibbon==="Yes") { 
+					lp=lptxt +
+					"<b style='color:blue;'>"+insideRibbonMessage+"</b></ br>"+
+					"<br><b>Contact your city and county zoning offices to verify that they do not require construction permits for this project.</b><br /></p>";
+				} else {
+					lp=lptxt +
+					
+					"<b>Contact your city and county zoning offices to verify that they do not require construction permits for this project.</b><br />" +
+					"If you are close to a city or county border, please check with both the city and county for potential permits.</p>"; 
+				}
+			 }
+	
+			var oth = 
+			"<h3><b>Other types of permits may be required for your project:</b></h3>" + "<p style='font-size:1.35em;'>" +	
+			"Any construction on, above, or under state-owned lands and/or waters must secure <u><a href = 'https://www.iowadnr.gov/Environmental-Protection/Land-Quality/Sovereign-Lands-Permits' target='_blank'>Iowa DNR Sovereign Lands Program</a></u> " +
+			" approval <b>in advance</b> of work." +
+			 "<br>If impacts to wetlands or any other water of the United States are proposed, or you plan to dump or place dredged or fill material in waters of the United States, you may need to obtain a permit from "+
+			 "<u><a href = 'http://www.mvr.usace.army.mil/Missions/Regulatory/' target='_blank'>US Army Corps of Engineers.</a></u>";
+			//" Attach these results to any permit application package that you submit.</p><br>";
+			//"<h4><a href = 'https://www.iowadnr.gov/Environmental-Protection/Land-Quality/Sovereign-Lands-Permits'>Iowa DNR Sovereign Lands</a></h4>" +
+			//"<h4><a href = 'https://www.mvr.usace.army.mil/Missions/Regulatory/'>US Army Corps of Engineers</a></h4>" +
+			
+			if (DA===undefined) {
+				$('#dahide').hide();
+				DA =""; 
+			}
+			//console.log(pName);
+			//console.log(da);//console.log (fZonelist.length);
+			if (fZonelist.length > 2) {
+				fldZone = fldZone + "<span> (All flood zones within 100 ft: "+ fZonelist+")</span>";
+			} 
+			
+			//console.log(protectedStream);
+			
+			var office =
+			//"<Span id='dahide' style='color:#f4428c'>"+DA+"</span><br>"+
+			"<div style='font-size: 1.35em'>	Project Type: "+pName+"<br>"+
+			" Drainage Area = "+da +unit+"<br>"+
+			
+			" Project Inside City Limits: "+inCity+" (Distance to the nearest city is "+ ds+" miles)<br>"+ //(ds/5280).toFixed(2)
+			" Protected Stream: " +protectedStream +"<br>"+
+			
+			" <div id='AEhere' style='display:none'>AE within 100 ft of project location: Yes</div>"+
+			
+			" Detailed Flood Insurance Study = "+fis+"<br>"+
+			
+			" FEMA Mapped Floodway = "+fis+"<br>"+
+			
+			" NFIP Participation = "+localCP+" ("+communityName+")<br>"+
+			
+			" FEMA Map Special Flood Hazard Area Zone = "+fldZone+"<br>"+
+			//"<br>"+
+			" FEMA Map Panel Number = " + panel+"<br>"+
+			//"<br>"+
+			" Type of FEMA Map Available = " +femaMapType + "<br>"+
+			" Delegated Community = "+delegated+"<br>"+
+			" Local Community Contact: <br>" +comm+"<br>"+
+			
+			 "Date of Query: "+new Date().toLocaleString()+"<br>"+
+			 "User Identified Project Location: " +lat+" , " +lon +"</div>" 
+			 /*
+			var office =
+			//"<Span id='dahide' style='color:#f4428c'>"+DA+"</span><br>"+
+			"<div style='font-size: 1.35em'>"+
+			"<table><tr><th>Project Type</th>"+"<th>Drainage Area</th>"+"<th>Protected Stream</th></tr>" +
+			"<tr><td>"+pName+"</td>"+"<td>"+da +unit+"</td>"+"<td>"+protectedStream+"</td><tr>"+
+			
+			"<tr><th>Project Inside City Limits</th>"+"<th>Distance to the nearest city</th><th>NFIP Participation</th></tr>"+
+			"<tr><td>"+inCity+"</td>"+ "<td>"+ds+" miles</td><td>"+localCP+" ("+communityName+")</td></tr>"+ //(ds/5280).toFixed(2)
+			
+			"<tr><th>Detailed Flood Insurance Study"+"<th>FEMA Mapped Floodway</th>"+"<th>FEMA Map Special Flood Hazard Area Zone</th></tr>"+
+			"<tr><td>"+fis+"</td><td>"+fis+"</td><td>"+fldZone+"</td></tr>"+
+			
+			"<tr><th>FEMA Map Panel Number</th>" + "<th>Type of FEMA Map Available</th>"+"<th>Delegated Community</th></tr>"+
+			
+			"<tr><td>"+panel+"</td><td>"+femaMapType + "</td><td>"+delegated+"</td></tr>"+
+			
+			"<tr><th>Local Community Contact</th><th>Date of Query</th><th>User Identified Project Location</th></tr>"+
+			"<tr><td>"+comm+"</td><td>"+new Date().toLocaleString()+"</td>"+"<td>"+lat+" , " +lon +"</td></tr>"+
+			
+			 "</table></div>";  */
+			document.getElementById("sp").innerHTML = sp;
+			document.getElementById("lp").innerHTML = lp;
+			document.getElementById("other").innerHTML = oth;
+			document.getElementById("office").innerHTML = office;
+			if (fldZone==="AE") {
+				$('#AEhere').show();//css("display","block");
+			}
+			$('#search').hide();  
+			//$('#BasemapToggle').hide();
+			$('#note').hide();
+			$('#getResult').hide();
+			//$('#title').hide();
+			$('#warning').hide();
+			$('#instruction').hide();
+			$('#locate').hide();
+			$('#resultWarning').show(); 
+			dom.byId("info").innerHTML = lat+" , " +lon;  //set the show coordinates the same as the project point
+			
+			
+			//new dojox.gfx.Moveable();  will get wrong answer to the tool
+			
+			$('#backTotop').hide();
+			$('#locateBtn').hide();
+			//$('#plss-search').hide();
+			//$('#showTRS').hide();
+			//document.getElementById("plss-search").style.display="none"; 
+			//document.getElementById("showTRS").style.display="none"; 
+			$('#tools').hide(); 
+			$('#restartButton').show();
+			
+			///document.getElementById('backTotop').appendChild(document.getElementById('office'));
+			
+			
+			//Get all of the checkboxes that are not checked and hide them (via their parent which is a div)
+			var UnselectedBoxes = $('input:checkbox:not(:checked)');  //get the unchecked checkboxes.
+			//console.log(UnselectedBoxes.length);
+				UnselectedBoxes.each(function(){
+					//console.log($(this).val());
+					$(this).parent('div').hide();
+			});	
+					
+	  }
+		////dojo.disconnect(moveStopToken); //dangerous,  turn this on will make the tool stop working 
+		//moveable = undefined;
+		//
+     }
+		//dojo.connect(dijit.byId('getResult'),"onclick", mapReady());  //this will work
+		 
+	 dojo.setObject('getResult', mapReady);  //set function mapReady here to be called outside the Require. Name it "getResult"
+	 
+	  
+}); //end of { at line 183
+	
+
+	$("#search").hide(); //hide the search box
+	
+	
+	function runMapReady(){
+		if (startPoint != null){
+		var methodCall = dojo.getObject('getResult'); //get "getResult", that is the function mapReady, being used outside the Require 
+		methodCall();
+		} else {
+		alert("Click map to add your project location first!"); 
+		return false;
+		}	
+		
+		//moveable.destroy(); //lock the added point, make it unmoveable.  
+		
+		//map.graphics.add(null);
+
+		
+		$("#map").css("pointer-events", "none") ;  //this will lock the mouse over the map. 
+		$("#combo").css("pointer-events", "none") ; //lock the project form
+		
+		var added =  //create new tags for results to be displayed 
+		"<div class='container'><br>"+
+		 "<h2 style='text-align: center; margin-top:0px; margin-bottom:0px;'><strong>Results</strong></h2>"+"<div id='print'>"+
+		"<button onclick=\"myFunction()\" class='btn btn-default hidden-print'>Print Result</button><br />"+
+		//"<br />"+
+		//"<a href='mailto:jointapplication@dnr.iowa.gov" +"?subject=FloodPlain State Permit Query&body=see attachment&attachment'>Email DNR Joint Application</a><br>"+
+		"</div>"+
+		//is-table-row
+		"<div class='row ' style='position:relative'><br>"+  //is-table-row used to make sp and lp the same height
+		 // "<h3 style='text-align: center'>Results</h3><br>"+    class='col-lg-6 col-md-6 col-sm-6 col-xs-12
+		    "<div id='sp' style='border: 1.5px solid;' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 '></div>" +
+			
+			"<div id='lp' style='border: 1.5px solid;' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 break-after'></div>"+
+			"</div>"+
+			"<div style='position:relative' class='row'><br>"+
+			"<div id='other' style='border: 1.5px solid; style='position:relative' ' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 break-before'></div>"+
+			//"<div id='other' style='border: 1.5px solid' class='col-lg-8 col-md-8 col-sm-8 col-xs-8'></div>"+
+			"<br /> &nbsp" +
+			"<h3><b>Additional Information</b></h3>"+
+			"<div id='office' style='border: 1.5px solid' class='col-lg-12 col-md-12 col-sm-12 col-xs-12'></div>"+
+		 "</div>"+
+		"</div>"; 
+		
+		$('#mark').after(added); //add after div  mark
+		//$('#backTotop').appendTo('#mark'); 
+		//added=""; //clear added
+		//$("#lp").css({"display": "flex","display": "-webkit-flex","flex-wrap": "wrap"});
+		//$("#sp").css({"display": "flex","display": "-webkit-flex","flex-wrap": "wrap"});
+		//$("#sp").height($("#lp").height());
+		//$("#sp").css("border","1.5px solid");
+		//$('#sp').css({'height':($('#lp').height()+'px')});
+		//$('.sameHeight').matchHeight();
+	}
+	
+	function myFunction(){
+	//$("#search").hide();
+	//$("#left").css({"transform":"scale(0.8,0.8)"});  this will make the div left smaller 
+		window.print();
+	}
+	
+		
+	
+	//$('#map').detach().appendTo("#newMap"); 
+	//$("#content").prependTo("#tophead");
+	function emailCurrentPage(){
+            //window.location.href="mailto:?subject="+document.title+"&body="+escape(window.location.href);
+			var doc = new jsPDF() 
+			
+			//({
+			//	unit: 'in',
+			//format: [8.5, 11]
+			//}) 
+
+			//doc.text('all', 20, 20)
+			source=$('#all')[0];
+			doc.fromHTML(source);
+			doc.save('good.pdf');
+			
+        }
+	
+    </script>
+  </head>
+
+<body class="calcite" style="background-color: #EEE">
+	<div class="container" id="all" >
+		<A NAME="top">
+		<div class='row'>
+			<div class='col-lg-11 col-md=11 col-sm-11 col-xs-11'>
+				<h1 id="title"style="font-weight:bold; ">
+					<img id="idnr_logo" src="images/DNR-logo_Web.jpg" alt="Iowa Department of Natural Resources" style="padding:5px; border-width:0px; float:left;"> 				
+				Do I need to apply for a flood plain permit?
+				</h1>
+			</div>
+		</div>	
+		<div class='row' id='policy'>
+			<h4 id='note' class='hidden-print'><a href="https://www.iowa.gov/policies/disclaimer" target="_blank" class='hidden-print'><h4 style="color: white; text-align:right;">Disclaimer</h4></a></h4>
+		</div>
+		<div class = 'row'>
+			<div class='col-lg-11 col-md=11 col-sm-11 col-xs-11' id='left'> 
+				<h3 id="warning" class='hidden-print'>If you are undertaking a project that may involve construction in an Iowa flood plain, 
+			this tool can help you determine if you need to apply for a state and/or local flood plain permit.  Please remember:<br>
+					<br  />
+					<ul>
+						<li>This tool is subject to revision at any time.</li>
+						<li>You are responsible for complying with all local, state and federal statutes, ordinances, rules 
+						and permit requirements applicable to the construction, operation and maintenance of your project.</li>
+						<li>The results from this tool can be used for general information and guidance.  If you want an official response about whether 
+						a permit is required for your project, please submit a <a  href='http://www.iowadnr.gov/Environmental-Protection/Land-Quality/Flood-Plain-Management/Flood-Plain-Dev-Permits/' target='_blank'><u>Joint Application</u>.</a><br></li>
+					</ul>
+					<br /> If you have any questions or the results are unclear, please contact the Iowa Department of Natural Resources at <a href="tel:866-849-0321"><u>866-849-0321</u>.</a><br />
+					<br />This web tool is optimized for use with Google Chrome; other web browsers may not provide full functionality of all features.	  
+				</h3>  
+				<h3 id='resultWarning'>The results from this tool can be used for general information and guidance.  If you want an official response about whether 
+			a permit is required for your project, please submit a <a  href='http://www.iowadnr.gov/Environmental-Protection/Land-Quality/Flood-Plain-Management/Flood-Plain-Dev-Permits/' target='_blank'><u>Joint Application</u>.</a>
+				</h3>
+			</div> 	  
+		</div>
+	 
+		<div class="row">
+			<div class="col-lg-12 col-md=12 col-sm-12" id="content">		<!-- the margin 10 px kick map to the next line -->
+				<br>
+				<h3><b>Project Type (<span>check all that apply</span>):</b></h3>
+				<form id="combo"  name="project" onchange="change(event)" autocomplete="off"> 
+					<div>
+						<input type="checkbox" style="margin-right: 10px;" class="project" VALUE="Animal" id="Animal" data-toggle="tooltip" data-placement="top"  title="Examples include but not limited to: confinement buildings, manure storage structures, and egg wash storage structures"><label for="Animal">Animal Feeding Operation Structure</label><br>
+					</div>
+					<div>	
+						<input type="checkbox" style="margin-right: 10px;" class="project" VALUE="Boat" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:non-floating docks located on a river (exceptions include Mississippi & Missouri Rivers; or within Coralville, Rathburn, Red Rock and Saylorville conservation pools).  Floating dock support pilings may be subject to the “Miscellaneous Obstruction” project type"><label for="Boat">Boat Docks</label><br>
+						<div  id='Boat' style='display:none;' class="choice">nbsp; Does the boat dock float? &nbsp;
+							<INPUT TYPE="RADIO" NAME="dock" VALUE="Yes"> Yes
+							<INPUT TYPE="RADIO" NAME="dock" VALUE="No" checked >No
+						</div>
+					</div>
+					<div>
+						<input data-toggle="tooltip" style="margin-right: 10px;" data-placement="top" title="Examples include but not limited to:roadway,railroad,pedestrian/trail,and driveway bridges, round pipe culverts, box culverts, temporary stream crossings for access and embankments associated with bridges and culverts" type="checkbox" class="project" VALUE="Bridge"><label for="Bridge">Bridge, Culverts, Stream Crossing and Road Embankments</label> <br> <!-- checked taken off -->
+						<div  id="Bridge" style='display:none;' class="choice">&nbsp; Does the bridge cross stream? &nbsp; <INPUT TYPE="RADIO" NAME="bridge1" VALUE="Yes" checked>Yes
+							<INPUT TYPE="RADIO" NAME="bridge1" VALUE="No">No
+						</div>
+					</div>
+					<div>
+						<input type="checkbox" style="margin-right: 10px;" style="margin-right: 10px;" class="project" VALUE="Buildings" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:sheds, detached garages, houses, residential buildings, industrial buildings, commercial buildings,  office buildings, restroom buildings, pole buildings, storage buildings, etc.  along with associated fill for proposed buildings"><label for="Buildings">Buildings</label> <br>
+					</div>
+					<div>
+						<input type="checkbox" style="margin-right: 10px;" class="project"  VALUE="Channel" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:channel enlargement/widening, ditch cleanout, channel to pipe conversion, pipe to channel conversion, and channel restoration, straightening/shortening channel alignment changes" ><label for="Channel">Channel Changes</label> <br>
+					</div>
+					<div>
+						<input type="checkbox"  style="margin-right: 10px;" class="project"   VALUE="Dam" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:impoundments, stormwater retention basins, low water crossings, weirs, roadway embankments, and low head dams"><label for="Dam">Dam </label><br>
+					</div>
+					<div>
+						<input type="checkbox"  style="margin-right: 10px;" class="project"   VALUE="Excavations" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:quarries, ponds, wetlands, oxbow restorations, laying back banks, and sedimentation basins"><label for="Excavations">Excavations </label><br>
+					</div>
+					<div>
+					<input type="checkbox"  style="margin-right: 10px;" class="project"   VALUE="Levees" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:small to large levees, dikes, spoil berms and spoil mounds, ditch cleanout spoil piles, and raising top of channel elevation" ><label for="Levees">Levees or Dikes</label><br>
+					</div>
+					<div>
+						<input type="checkbox"  style="margin-right: 10px;" class="project"  VALUE="Pipeline" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:underground fiber optic, gas, sanitary sewer,water, storm sewer, electric, etc. "><label for="Pipeline">Pipeline Crossings </label><br>
+						<div  id='Pipeline' style='display:none;' class="choice">&nbsp; Will the natural contours of the channel and flood plain be maintained, restored to preconstruction?&nbsp;
+							<INPUT TYPE="RADIO" NAME="pipe" VALUE="Yes" checked>Yes
+							<INPUT TYPE="RADIO" NAME="pipe" VALUE="No">No <br>&nbsp; Are you installing stream bank stabilization measures? &nbsp;
+							<INPUT TYPE="RADIO" NAME="measure" VALUE="Yes" checked>Yes
+							<INPUT TYPE="RADIO" NAME="measure" VALUE="No">No
+						</div>
+					</div>
+					<div>
+						<input type="checkbox"  style="margin-right: 10px;" class="project"   VALUE="Sanitary" data-toggle="tooltip" data-placement="top" title="Examples include but is not limited to:municipal, private, commercial, industrial, construction, and/or disaster clean-up solid waste disposal typically compacted and buried."><label for="Sanitary">Sanitary Landfills</label> <br>
+					</div>
+					<div>
+						<input type="checkbox"  style="margin-right: 10px;" class="project"   VALUE="Bank" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:stone rip rap, gabion baskets, broken concrete, jetties, rootwads,  and bendway weirs"><label for="Bank">Stream Bank Protective Devices</label> <br>
+					</div>
+					<div>
+						<input type="checkbox"  style="margin-right: 10px;" class="project"   VALUE="SOD" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to: open sided picnic shelter without utilities, safety berms, aggregate/soil piles, some landscaping, retaining walls, fill, embankment, pipe outlets, boat ramps,  new utility poles, temporary construction causeways,  roadway/drive embankment, and utilities"><label for="SOD">Structures, Obstructions, Fill, Spoil, Deposits</label> <br>
+					</div>
+					<div>
+						<input type="checkbox" style="margin-right: 10px;" class="project"   VALUE="water" data-toggle="tooltip" data-placement="top" title="Examples include but not limited to:all parts of the waste or water treatment facility including water supply wells, water intake structures, treatment facilities, buildings and realted utilities"><label for="water">Waste or Water Treatment Facility</label> <br>
+					</div>			
+				</form> 	
+				<!--
+				<div id='joinApp' style='display:none'>
+					<p>Click the following link to get a joint Application</p>
+					<a  class='hidden-print' href='http://www.iowadnr.gov/Environmental-Protection/Land-Quality/Flood-Plain-Management/Flood-Plain-Dev-Permits/'>Go to Joint Application</a><br>
+				</div> -->
+		
+		
+				<div class='row'>
+					<div id="tools" class="col-lg-12 col-sm-12 col-md-12"> 
+					<h3><b>Project Location - Search Options:</b></h3>
+						<p id="instruction" style="font-size:1.3em;"> There are 3 search options available to find your project's location. Once you zoom to your location, click on the map to add a point for your location. Then click the "Get Results" button below the map.
+						<!--Enter your location information (address, latitude - longitude, or zip code) in the search box below. You can also identify your project location on the map by zooming in (shift + mouse to zoom to an area). Then click to add a point.  You can move the point to a more precise location if needed. -->
+						</p>
+						<p>1. Search by Address; City; Zip code or Lat/Long</p>
+						<div id="search"></div>
+						<br />
+						<p> --- Or ---</p>
+						<p>2. Search Township/Range/Section (double click the button below)</p>
+						<button id="showTRS" onclick="showHideSearch()" style="position: fixed top: 700px;left:400px;" class="btn btn-default hidden-print">Search By Township</button><br>
+						<br />
+						<div id="plss-search" style="position:relative;">
+							<input id="plss" class="searchinput" type="text" placeHolder="T95NR45W02">           
+							<button id="search-plss" class="btn btn-search"  title="Township	T65N - T100N
+Range	R01E - R07E
+R01W - R49W
+Section	01 - 36
+Example	T84NR03E02" 
+		   type="button"><b>Search</b></button>
+						</div>
+						
+						<p> --- Or ---</p>
+				<!--	<a id="restartButton" href="javascript:history.go(0)" class="btn btn-default hidden-print" style="background-color:white; margin-left:25px; position:relative; top:30px;left:30px;"><b>Restart</b></a> -->
+						<p>3. Click the Button below to Find Current Location (mobile users)</p>
+						<p id="locate"></p>
+						<div id="locateBtn">Click Me</div>
+						<br />
+						<div data-dojo-type="Tooltip" style="display:none"  data-dojo-props="connectId:'plss', position:['above']">
+							<table cellpadding="2" width="225">
+								<caption><b>Township-Range-Section Search</b></caption>
+								<tr><td>Township</td><td><b>T</b>65 - 100<b>N</b></td></tr>
+								<tr><td>Range</td><td><b>R</b>01 - 07<b>E</b></td></tr>
+								<tr><td></td><td><b>R</b>01 - 49<b>W</b></td></tr>
+								<tr><td>Section</td><td>01 - 36</td></tr>
+								<tr><td></td><td></td></tr>
+								<tr><td><i>Example</i></td><td><i>T84NR03E02</i></td></tr>
+							</table>
+						</div>
+					</div>	
+					<br />
+				<a id="restartButton" href="javascript:history.go(0)" class="btn btn-default hidden-print" style="background-color:white; margin-left:20px; position:relative; top:10px;left:10px;"><b>Restart</b></a> 
+					<!--<div id="map" style="padding: 10px; height:490px; width: 900px;" >
+						<div id="BasemapToggle"></div>
+					</div>-->
+					<span id="info" style="position: relative; left: 20px; top: 35px; background-color: white; font-size:1.2em; z-index:49;"></span>
+						<div align="right">
+						<span id="scale" class="hidden-print" style="position:absolute; left:250px; bottom:120px; z-index:100; color:white">
+						</div>
+					<img id="legendIMG" src="images/DA_index.png" alt="Map Legend: Mapped area is shown in solid light blue, 
+					Unmapped area is shown with a cross hatch pattern.">
+				</div>
+				
+				<div class="row">
+					<div id="map" style="padding: 10px; height:490px; width: 900px;" >
+						<div id="BasemapToggle"></div>
+					</div>
+				</div>
+		 
+				<div id="scalebar" ></div>
+				 <a  style="margin-top: 20px;"id='backTotop' HREF="#top" class="btn btn-default">Back To Top</a> <br />
+				 <br />
+				 <button id="getResult" type="button" style="margin:0px;" class="btn btn-primary btn-block" onClick="javascript:runMapReady()"><strong style='font-size:1.8em;'>Get Result</strong></button>
+			</div>			
+			<div id="mark"></div>
+		</div>  <!-- container -->
+	</div>	 
+<script>
+
+$('[data-toggle="tooltip"]').tooltip({
+  events: {
+  def:     "mouseenter,mouseleave",    // default show/hide events for an element
+  input:   "focus,click,blur, dblclick",               // for all input elements
+  widget:  "focus mouseenter,blur mouseleave",  // select, checkbox, radio, button
+  tooltip: "mouseenter,mouseleave"     // the tooltip element
+  }
+  });
+ /*
+function editNodeText(regex, input, helpId, helpMessage){
+	if(!regex.test(input)){
+		if (helpId != null)
+			while(helpId.firstChild){
+				helpId.removeChild(helpId.firstChild);
+			}
+		helpId.appendChild(document.createTextNode(helpMessage));
+		return false;
+	}
+	else {
+		if(helpId !=null) {
+			while (helpId.firstChild){
+				helpId.removeChild(helpId.firstChild);
+			}
+			return true;
+		}
+	}
+}
+function isTheFieldEmpty(inputField, helpId) {
+return editNodeText(/^[A-Za-z\.\' \-]{2,15}\s?[A-Za-z\.\' \-]{2,15}\s?[A-Za-z\.\' \-]{2,15}/,inputField.value,helpId,"Please enter a valid name")
+}
+function isAddressOk(inputField,helpId)	{
+	return editNodeText(/^[A-Za-z0-9\.\' \-]{5,30}$/,inputField.value,helpId,"Please enter a street");
+}
+	
+function isCityOk(inputField,helpId)	{
+	//return editNodeText(/^[A-Za-z\.\' \-]{5,30}$/,inputField.value,helpId,"Please enter a city");
+	return  editNodeText(/^[A-Za-z]+,[ ]?[A-Za-z]+{2,}+,[0,9](5)$/,inputField.value,helpId,"Please enter a city, state Abbr and zip");
+}
+function isStateOk(inputField,helpId)	{
+return editNodeText(/^A[LKSZR]|I[ADL]|N[CDEHJ$Y]|W[IVY]|K[S]|M[AIO]$/i,inputField.value,helpId,"Please enter a valid State code");
+}
+function isAddressOk(inputField,helpId)	{
+	return editNodeText(/^[A-Za-z0-9\.\' \-]{5,30}$/,inputField.value,helpId,"Please enter a street");
+}
+function isZipOk(inputField,helpId)	{
+	return editNodeText(/^[0-9]{5}$/,inputField.value,helpId,"Please enter a zip code");
+}
+function isPhoneOk(inputField,helpId)	{
+ return editNodeText(/^([0-9]( |-)?)?(\(?[0-9]{3}\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4}|[a-zA-Z0-9]{7})$/, inputField.value, helpId, "Enter a Phone Number (Ex.412-828-3000)");
+					///^([0-9]( |-)?)?(\(?[0-9]{3}\)?|[0-9]{3})( |-)?([0-9]{3}( |-)?[0-9]{4}|[a-zA-Z0-9]{7})$/
+}
+function isEmailOk(inputField,helpId)	{
+	return editNodeText(/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,inputField.value,helpId,"Please enter an email");
+}
+
+function isTheRoadEmpty(inputField, helpId) {
+return editNodeText(/^[A-Za-z\.\' \-]{2,15}\s?[A-Za-z\.\' \-]{2,15}\s?[A-Za-z\.\' \-]{2,15}/,inputField.value,helpId,"Please enter a valid name")
+} */
+
+function multipleProjects() {
+	//$('#combo').change(function() {
+	$('.project').change(function() {
+	 var selectedOptions = $('input.project:checkbox:checked');//console.log (selectedOptions);
+	 if (selectedOptions.length > 1){
+		var url = 'https://www.iowadnr.gov/Environmental-Protection/Land-Quality/Flood-Plain-Management/Flood-Plain-Dev-Permits/'
+		var win = window.open(url, '_blank');
+		win.focus();
+	}
+ });
+ }
+ 
+  
+  function changeSelect(){  //this function will be called twice
+	var PN =$('input.project:checkbox:checked').val();
+	//console.log(PN);
+	var proName =$('label[for="'+PN+'"]').text(); 
+	 //console.log(proName);
+	 
+	var selectedBoxes = $('.project:checked');  //get the checked checkboxes using common class name or $('input:checkbox:checked')//console.log (selectedBoxes.length);
+			selectedBoxes.each(function(){  // or $.each(selectedBoxes, function(){}
+				//console.log($(this).val());
+				//$(this).parent('div').hide();
+	 });	
+	 
+	 var checkedValues = $('.project:checked').map(function(){
+		return this.value;
+	 }).get();//console.log (checkedValues);
+	 
+	 var subs=["Bridge","Boat","Pipeline"]; // use ["Bridge","Boat","Pipeline"]; then add '#' in show or hide, 
+	 subs.forEach(function(item){
+		//console.log(item);
+	
+		if ($.inArray(item,checkedValues)!= -1){
+		//console.log('$('+'"#'+item+'")');
+			$('#'+item).show();    //doesn't work. 
+			//$(item).show();	//works well 
+		} else {
+			$('#'+item).hide();	
+		}
+	 });
+	 
+
+}
+
+changeSelect(); //first call, to handle when one project selected by default in html 
+
+function change(e) {
+	changeSelect(); //second call when user change the selection 
+	
+}
+//console.log(document.getElementById("radio").value);
+
+
+//$(window).load(function() { 
+//	$("#content").detach().prependTo("tophead");
+//})
+</script>
+	
+</body>
+
+</html>
